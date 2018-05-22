@@ -1,0 +1,106 @@
+#!/bin/bash
+
+RED=`tput setaf 1`
+GREEN=`tput setaf 2`
+NC=`tput sgr0`
+
+# only root can run the script
+if [[ $EUID -ne 0 ]]; then
+   echo "${RED}This script must be run as an user${NC}" 1>&2
+   exit 1
+fi
+
+echo "instalamos python-psycopg2" #para postgres en python
+sudo apt update
+sudo apt-get install python-psycopg2 -y
+
+echo "Instalamos las librerias de python"
+sudo apt install python-pip -y 
+pip install ConfigParser
+pip install requests
+
+echo "Instalamos e iniciamos postgresql"
+sudo apt install postgresql -y
+
+echo "Start and Enable PostgreSQL Server"
+sudo systemctl start postgresql.service
+sudo systemctl enable postgresql.service 
+
+
+sudo -u postgres dropuser geoip
+
+echo "Creamos el usuario gepip"
+if ! sudo -u postgres createuser geoip 2>/dev/null ; then
+	echo "No se ha podido crear el usuario geoip. Puede que ya exista."
+fi	
+echo
+echo
+# Bucle para comprobar la clave que el usuario introduce
+CLAVE_1=""
+CLAVE_2=""
+typeset -i REPETIR_PWD=1
+while [ $REPETIR_PWD -eq 1 ]
+do
+	echo "Escriba la nueva password para el usuario geoip"
+	read -s -p "Password: " CLAVE_1
+	echo ""
+	read -s -p "Repita el password: " CLAVE_2
+	echo ""
+	# Verificamos que la clave sea la misma
+	if [ $CLAVE_1 = $CLAVE_2 ] ; then
+		REPETIR_PWD=0
+	else
+		echo "Los password no coinciden. Por favor, intentelo de nuevo."
+	fi	
+done
+
+sudo -u postgres psql -U postgres -d postgres -c "alter user geoip with password '$CLAVE_1';"
+
+echo "[postgresql]
+host=localhost
+database=geoip
+user=geoip
+password=$CLAVE_1" > database.ini
+
+#Descomentar para solo ejecutar el programa con root
+#chmod 600 database.ini
+
+# Borramos las claves de las variables
+unset CLAVE_1
+unset CLAVE_2
+
+echo "Creamos la base de datos 'geoip'"
+if ! sudo -u postgres createdb geoip -O geoip 2>/dev/null ; then
+	echo "No se ha podido crear la base de datos geoip. Puede que ya exista."
+fi
+
+sudo -u postgres psql -U postgres -d postgres -c "GRANT ALL PRIVILEGES ON DATABASE \"geoip\" TO geoip;"
+sudo -u postgres psql -U postgres -d postgres -c "ALTER USER geoip WITH SUPERUSER "
+
+
+sudo /etc/init.d/postgresql reload
+sudo service postgresql restart
+
+#Preguntamos si el usuario quiere que solo pueda el root
+#si si ejecutamos aqui inserpostgres
+read -p "Instalar para solo root (y/N)?" -n 1 -r
+echo    
+if [[ $REPLY =~ ^[Yy]$ ]]
+then
+		chmod 600 database.ini
+		python insertPostgres.py
+		echo
+		echo "Ahora ya puede ejecutar: sudo python getGeoIP.py <IP>"
+fi
+
+python insertPostgres.py
+
+#borramos los ficheros descargador
+rm GeoLite2-ASN-CSV.zip
+rm GeoLite2-City-CSV.zip
+
+echo 
+echo "Ahora ya puede ejecutar: python getGeoIP.py <IP>"
+
+
+exit 0
