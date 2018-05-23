@@ -136,35 +136,67 @@ def getGeo(addr):
     else:
 	print addr + ": Ip invalida"
 
+COM_HELP = '-h'
+COM_VERB = '-v'
+COM_FILE = '-f'
+
 def printHelp():
     print "author         : Raul Calvo Laorden (raulcalvolaorden@gmail.com)"
     print "description    : "
     print "date           : 2018-05-24"
-    print "usage          : python IPloc.py <IP>"
+    print "usage          : python IPloc.py OPTIONS"
     print "--------------------------------------------------------------------------------------\n"
-    print "Opciones: "
-    print "  -h:                        Print this message."
-    print "  -v                         Increase verbosity level"
+    print "OPTIONS: "
+    print "  {}:                        Print this message.".format(COM_HELP)
+    print "  {}:                        Increase verbosity level".format(COM_VERB)
+    print "  {} <FILE>:                 Read IPs from file".format(COM_FILE)
 
 if __name__ == "__main__":
 
-    if len(sys.argv) > 1 and str(sys.argv[1]) =="-h":
-        printHelp()
-    else:
-	contador=0
-	full=False
-	for ip in sys.argv:
-	    if contador == 0:
-		if len(sys.argv) == 1:
-		    addr=requests.get('https://ipinfo.io/ip').text.rstrip() #si no le pasamos ningun parametro devuelve la ip de la maquina que la ejecuta
-		    getGeo(addr)
-	    elif contador==1 and str(sys.argv[contador]) =="-v":
-		full=True
-		if len(sys.argv) == 2:
-		    addr=requests.get('https://ipinfo.io/ip').text.rstrip()   #si no le pasamos ningun parametro devuelve la ip de la maquina que la ejecuta
-		    getGeo(addr)
-	    else:
-		addr = ip
-		getGeo(addr)
-	    contador+=1
+    argu = None         # Indica que estamos usando un argumento
+    archivo = []        # Almacena los archivos de las ip.
+    full = False        # Modo verbose
+    direcciones = []    # Conjunto de direcciones a analizar
+    del sys.argv[0]     # Elimino la llamada al programa
+    for el in sys.argv:
+        # Argumentos unarios (que no necesitan de otro argumento):
+        if argu == None:
+            # Si coincide con uno de los que necesitan otro argumento, lo guardamos para la siguiente iteracion
+            if el in (COM_FILE):
+                argu = el
+            # A partir de aqui, cada argumento cumple con una funcion
+            elif el == COM_VERB:
+                full = True
+            elif el == COM_HELP:
+                printHelp()
+                sys.exit()
+            else:
+                # Si no se trata de ningun argumento, lo tratamos como IP (aunque puede que no lo sea)
+                direcciones.append(el)
+        else:
+            # Aqui realizamos operaciones con los argumentos
+            if argu in (COM_FILE):
+                archivo.append(el)
+            # Limpiamos el argumento guardado
+            argu = None
 
+    # Si le hemos pasado archivos:
+    if archivo:
+        for arc in archivo:
+            try:
+                # Abrimos el archivo y cogemos la linea (cada linea es una IP)
+                with open(arc, 'r') as fp:
+                    for line in fp.readlines():
+                        direcciones.append(line.replace("\n", ""))
+            except IOError:
+                print("The file doesn't exist or is not readable.", archivo)
+            finally:
+                fp.close()
+
+    if not direcciones:
+        # Si no tiene argumentos, cogemos nuestra propia IP
+	getGeo(requests.get('https://ipinfo.io/ip').text.rstrip()) #si no le pasamos ningun parametro devuelve la ip de la maquina que la ejecuta
+    else:
+        # Para cada IP, lo consultamos.
+        for direc in direcciones:
+            getGeo(direc)
