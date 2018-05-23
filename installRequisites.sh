@@ -90,7 +90,7 @@ then
 		chmod 600 database.ini
 		python insertPostgres.py
 		echo
-		echo "Ahora ya puede ejecutar: sudo python getGeoIP.py <IP>"
+		echo "Ahora ya puede ejecutar: sudo python IPloc.py <IP>"
 fi
 
 python insertPostgres.py
@@ -100,7 +100,7 @@ rm GeoLite2-ASN-CSV.zip
 rm GeoLite2-City-CSV.zip
 
 echo 
-echo "Ahora ya puede ejecutar: python getGeoIP.py <IP>"
+echo "Ahora ya puede ejecutar: python IPloc.py <IP>"
 
 
 exit 0
