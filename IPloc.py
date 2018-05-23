@@ -125,8 +125,14 @@ def validIP(address):
         return False
 
 def getGeo(addr):
+    if(not validIP(addr)):
+	try:
+	    addr=str(socket.gethostbyname(addr)) #si no es una IP comprobamos hostname
+	except:
+	    addr=""
+    
     if(validIP(addr)):
-	socket.inet_aton(addr) #si es ip valida sigue. se usa?
+	socket.inet_aton(addr) 
 	if full:
 	    jsonAux = geo(addr)
 	else:
@@ -134,7 +140,7 @@ def getGeo(addr):
 	print "IP: " + addr
 	print json.dumps(jsonAux, indent=4, sort_keys=True, ensure_ascii=False).encode('utf8')
     else:
-	print addr + ": Ip invalida"
+	print addr + " Ip invalida"
 
 COM_HELP = '-h'
 COM_VERB = '-v'

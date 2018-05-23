@@ -4,6 +4,9 @@ IPloc es un programa en python que descarga la base de datos publica de GeoLite2
 
 Se ha utilizado PostgreSQL ya que dispone de un tipo de datos para IPs y redes (inet).
 
+* Traduccion de hostname a IP
+	Solo obtiene una ip
+
 ## Instalación
 ### Requisitos
 * Linux
@@ -37,7 +40,6 @@ Ejecutamos insertPostgres.py para actualizar la base de datos postgresql con la 
 Agradecer a Miguel Romeral ([enlace github](https://github.com/miguelromeral)) por su ayuda en las pruebas y en el código de instalación. 
 
 ## TODO
-* Traduccion de hostname a IP
 * Instalacion en windows
 * Instalacion en MAC OS
 * Descarga premium MaxMind
