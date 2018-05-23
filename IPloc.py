@@ -22,7 +22,23 @@ import sys
 import pprint
 import socket
 import psycopg2.extensions
-from config import config
+from configparser import ConfigParser
+
+#Funcion para obtener los datos de la conexion a la base de datos
+def config(filename='database.ini', section='postgresql'):
+    try:
+	parser = ConfigParser()
+	parser.read(filename) #leemos el fichero
+
+	db = {}
+	params = parser.items(section) #cogemos la seccion postgresql
+	for param in params:
+	    db[param[0]] = param[1]
+
+	return db
+    except:
+	print "Error al cargar datos desde database.ini"
+	sys.exit(0)
 
 #funcion que obtiene la informacion de una ip y la devuelve en formato resumido
 def geoShort(ip):
