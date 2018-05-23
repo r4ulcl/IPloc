@@ -27,9 +27,9 @@ Ejecutamos insertPostgres.py para actualizar la base de datos postgresql con la 
 
 ## Uso
 ```python
-    python getGepIP.py <IP> #returns <IP> info
+    python IPloc.py <IP> #returns <IP> info
     
-    python getGepIP.py # returns your public ip info
+    python IPloc.py # returns your public ip info
 ```
 
 
@@ -40,7 +40,6 @@ Agradecer a Miguel Romeral ([enlace github](https://github.com/miguelromeral)) p
 * Traduccion de hostname a IP
 * Instalacion en windows
 * Instalacion en MAC OS
-* Leer IPs de un fichero
 * Descarga premium MaxMind
 * Elegir idioma de la BDD en la instalacion
 
