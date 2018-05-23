@@ -93,11 +93,12 @@ then
 		echo "Ahora ya puede ejecutar: sudo python IPloc.py <IP>"
 fi
 
-python insertPostgres.py
+python IPloc.py -i
 
 #borramos los ficheros descargador
 rm GeoLite2-ASN-CSV.zip
 rm GeoLite2-City-CSV.zip
+rm -r /tmp/GeoLite2-*
 
 echo 
 echo "Ahora ya puede ejecutar: python IPloc.py <IP>"
