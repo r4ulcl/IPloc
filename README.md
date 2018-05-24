@@ -20,7 +20,7 @@ Se ha utilizado PostgreSQL ya que dispone de un tipo de datos para IPs y redes (
 
 Instalar requisitos ejecutando installRequisites.sh como administrador:
 
-'sudo bash installRequisites.sh'
+`sudo bash installRequisites.sh`
 
 Nos preguntara una contraseña para el usuario geoip de postgresl que debemos introducir dos veces. Y si queremos que se instale solo para root. De esta forma solo un usuario con permisos de administrador podrá ejecutar el programa, pero el fichero con la contraseña de postgres solo podrá leerla un administrador.
 
@@ -34,21 +34,21 @@ Nos preguntara una contraseña para el usuario geoip de postgresl que debemos in
 ## Uso
 
 Para obtener la información de una IP o más:
-'''python
-python IPloc.py <IP&gt;
-python IPloc.py <IP1> <IP2> <IP3>
-'''
+```python
+   python IPloc.py <IP>;
+   python IPloc.py <IP1> <IP2> <IP3>
+```
 
 Para obtener la información de nuestra IP publica:
-'''python
-python IPloc.py
-'''
+```python
+   python IPloc.py
+```
 
 Para obtener la información de una lista de IPs desde un fichero :
-'''python
-python IPloc.py -f <fichero&gt;
-python IPloc.py -f <fichero1> -f <fichero2> -f <fichero3>
-'''
+```python
+   python IPloc.py -f <fichero>;
+   python IPloc.py -f <fichero1> -f <fichero2> -f <fichero3>
+```
 
 Para obtener la información de un hostname se pueden utilizar los mismos comandos comentados anteriormente pero sustituyendo las IPs por hostnames
 
@@ -77,4 +77,4 @@ LinkedIn: Miguel Romeral (https://www.linkedin.com/in/miguelromeral/)
 GNU General Public License v3.0
 
 This product includes GeoLite2 data created by MaxMind, available from
-href="http://www.maxmind.com"&gt;http://www.maxmind.com<a href="http://www.maxmind.com"&gt;http://www.maxmind.com</a&gt;.---#------#---a&gt" class="hiddenSpellError">a&gt;.
+<a href="http://www.maxmind.com">http://www.maxmind.com</a>
