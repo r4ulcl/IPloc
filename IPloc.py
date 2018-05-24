@@ -2,10 +2,10 @@
 # -*- coding: UTF-8 -*-
 
 
-#author         : Raul Calvo Laorden (raulcalvolaorden@gmail.com)
-#description    :
+#authors        : Raul Calvo Laorden y Miguel Romeral
+#description    : IPloc es un programa en python que utiliza la base de datos publica de GeoLite2 (maxmind.com) y nos da información sobre las IPs que le pasemos por parámetro o en un fichero.
 #date           : 2018-05-24
-#usage          : python IPloc.py <IP>
+#usage          : python IPloc.py <OPTIONS>
 #-----------------------------------------------------------------------------------------------------------
 
 import time
@@ -39,6 +39,23 @@ def config(filename='database.ini', section='postgresql'):
 	    db[param[0]] = param[1]
 
 	return db
+    except:
+	print "Error al cargar datos desde database.ini"
+	sys.exit(0)
+	
+def idioma(filename='database.ini', section='idioma'):
+    try:
+	parser = ConfigParser()
+	parser.read(filename) #leemos el fichero
+
+	db = {}
+	params = parser.items(section) #cogemos la seccion postgresql
+	idioma = "es"
+	for param in params:
+	    idioma =  param[1]
+	    db[param[0]] = param[1]
+
+	return idioma
     except:
 	print "Error al cargar datos desde database.ini"
 	sys.exit(0)
@@ -175,7 +192,8 @@ def insertPostgres():
     cur.execute("COPY public.cityblocks FROM '"+ficheroPath+"' CSV ENCODING 'utf-8';")
     
     #obtenemos la ruta del fichero
-    ficheroPath="/tmp/"+carpetaCity+"/GeoLite2-City-Locations-es.csv"
+    aux=idioma()
+    ficheroPath="/tmp/"+carpetaCity+"/GeoLite2-City-Locations-"+str(aux)+".csv"
     #eliminamos la cabecera del csv
     with open(ficheroPath, 'r') as fin:
 	data = fin.read().splitlines(True)
@@ -310,18 +328,18 @@ def getGeo(addr):
 COM_HELP = '-h'
 COM_VERB = '-v'
 COM_FILE = '-f'
-COM_INSERT = '-i'
+COM_INSERT = '-u'
 
 def printHelp():
-    print "author         : Raul Calvo Laorden (raulcalvolaorden@gmail.com)"
-    print "description    : "
-    print "date           : 2018-05-24"
-    print "usage          : python IPloc.py OPTIONS"
+    print "#authors        : Raul Calvo Laorden y Miguel Romeral"
+    print "#description    : IPloc es un programa en python que utiliza la base de datos publica de GeoLite2 (maxmind.com) y nos da información sobre las IPs que le pasemos por parámetro o en un fichero."
+    print "#date           : 2018-05-24"
+    print "#usage          : python IPloc.py <OPTIONS>"
     print "--------------------------------------------------------------------------------------\n"
     print "OPTIONS: "
     print "  {}:                        Print this message.".format(COM_HELP)
     print "  {}:                        Increase verbosity level".format(COM_VERB)
-    print "  {}:                        Insert data".format(COM_INSERT)
+    print "  {}:                        Update database".format(COM_INSERT)
     print "  {} <FILE>:                 Read IPs from file".format(COM_FILE)
 
 if __name__ == "__main__":

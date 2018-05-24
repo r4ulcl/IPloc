@@ -81,6 +81,49 @@ sudo -u postgres psql -U postgres -d postgres -c "ALTER USER geoip WITH SUPERUSE
 sudo /etc/init.d/postgresql reload
 sudo service postgresql restart
 
+
+
+PS3='Seleccione el idioma de la base de datos: '
+options=("DE" "EN" "ES" "FR" "JA" "PT-BR" "RU" )
+select opt in "${options[@]}"
+do
+    case $opt in
+        "DE")
+			IDIOMA="de"
+			break
+            ;;
+        "EN")
+			IDIOMA="en"
+			break
+            ;;
+        "ES")
+			IDIOMA="es"  
+			break          
+			;;
+        "FR")
+            IDIOMA="fr"
+			break
+			;;
+        "JA")
+            IDIOMA="ja"
+			break
+			;;
+        "PT-BR")
+            IDIOMA="pt-BR"
+			break
+			;;
+        "RU")
+            IDIOMA="ru"
+			break
+			;;
+        *) IDIOMA="es" ;;
+    esac
+done
+
+echo "[idioma]
+idioma=$IDIOMA" >> database.ini
+
+
 #Preguntamos si el usuario quiere que solo pueda el root
 #si si ejecutamos aqui inserpostgres
 read -p "Instalar para solo root (y/N)?" -n 1 -r
@@ -93,7 +136,7 @@ then
 		echo "Ahora ya puede ejecutar: sudo python IPloc.py <IP>"
 fi
 
-python IPloc.py -i
+python IPloc.py -u
 
 #borramos los ficheros descargador
 rm GeoLite2-ASN-CSV.zip

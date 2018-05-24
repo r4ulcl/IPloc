@@ -13,6 +13,8 @@ Se ha utilizado PostgreSQL ya que dispone de un tipo de datos para IPs y redes (
 
 * Lectura de IPs desde uno o varios ficheros
 
+* Elegir idioma de la BDD en la instalación
+
 ## Instalación
 ### Requisitos
 * Linux
@@ -22,7 +24,7 @@ Instalar requisitos ejecutando installRequisites.sh como administrador:
 
 `sudo bash installRequisites.sh`
 
-Nos preguntara una contraseña para el usuario geoip de postgresl que debemos introducir dos veces. Y si queremos que se instale solo para root. De esta forma solo un usuario con permisos de administrador podrá ejecutar el programa, pero el fichero con la contraseña de postgres solo podrá leerla un administrador.
+Nos preguntara una contraseña para el usuario geoip de postgresl que debemos introducir dos veces, el idioma para las ciudades de la base de datos y si queremos que se instale solo para root. De esta forma solo un usuario con permisos de administrador podrá ejecutar el programa, pero el fichero con la contraseña de postgres solo podrá leerla un administrador.
 
 ### Requisitos sin el script de instalación
 * Python
@@ -32,6 +34,11 @@ Nos preguntara una contraseña para el usuario geoip de postgresl que debemos in
 * Python requests
 
 ## Uso
+
+Para actualizara la base de datos (se recomienda mensualmente):
+```python
+   python IPloc.py -u;
+```
 
 Para obtener la información de una IP o más:
 ```python
@@ -56,7 +63,6 @@ Para obtener la información de un hostname se pueden utilizar los mismos comand
 * Instalación en windows
 * Instalación en MAC OS
 * Descarga premium MaxMind
-* Elegir idioma de la BDD en la instalación
 
 ## Autores
 
@@ -70,7 +76,7 @@ Linkedin: https://www.linkedin.com/in/raulcalvolaorden/
 
 Mail: miguelangel.garciar@edu.uah.es
 
-LinkedIn: Miguel Romeral (https://www.linkedin.com/in/miguelromeral/)
+LinkedIn: (https://www.linkedin.com/in/miguelromeral/)
 
 ## License
 
