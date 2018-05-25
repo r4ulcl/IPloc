@@ -115,7 +115,7 @@ def insertPostgres():
 	            "     OIDS=FALSE"+
 	            ");"+
 	            "ALTER TABLE public.asn"+
-	            "     OWNER TO locip;")
+	            "     OWNER TO iploc;")
     
 	cur.execute("DROP TABLE IF EXISTS public.cityblocks;")
 	cur.execute("CREATE TABLE public.cityblocks ( "+
@@ -135,7 +135,7 @@ def insertPostgres():
 	            "  OIDS=FALSE"+
 	            ");"+
 	            "ALTER TABLE public.cityblocks"+
-	            "  OWNER TO locip;")
+	            "  OWNER TO iploc;")
     
 	cur.execute("DROP TABLE IF EXISTS public.citylocations;")
 	cur.execute("CREATE TABLE public.citylocations("+
@@ -159,7 +159,7 @@ def insertPostgres():
 	            "  OIDS=FALSE"+
 	            ");"+
 	            "ALTER TABLE public.citylocations"+
-	            "  OWNER TO locip;")
+	            "  OWNER TO iploc;")
     
 	con.commit()
     
