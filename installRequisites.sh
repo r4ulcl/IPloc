@@ -27,11 +27,11 @@ sudo systemctl start postgresql.service
 sudo systemctl enable postgresql.service 
 
 
-sudo -u postgres dropuser geoip
+sudo -u postgres dropuser iploc
 
-echo "Creamos el usuario gepip"
-if ! sudo -u postgres createuser geoip 2>/dev/null ; then
-	echo "No se ha podido crear el usuario geoip. Puede que ya exista."
+echo "Creamos el usuario iploc"
+if ! sudo -u postgres createuser iploc 2>/dev/null ; then
+	echo "No se ha podido crear el usuario iploc. Puede que ya exista."
 fi	
 echo
 echo
@@ -41,7 +41,7 @@ CLAVE_2=""
 typeset -i REPETIR_PWD=1
 while [ $REPETIR_PWD -eq 1 ]
 do
-	echo "Escriba la nueva password para el usuario geoip"
+	echo "Escriba la nueva password para el usuario iploc"
 	read -s -p "Password: " CLAVE_1
 	echo ""
 	read -s -p "Repita el password: " CLAVE_2
@@ -54,12 +54,12 @@ do
 	fi	
 done
 
-sudo -u postgres psql -U postgres -d postgres -c "alter user geoip with password '$CLAVE_1';"
+sudo -u postgres psql -U postgres -d postgres -c "alter user iploc with password '$CLAVE_1';"
 
 echo "[postgresql]
 host=localhost
-database=geoip
-user=geoip
+database=iploc
+user=iploc
 password=$CLAVE_1" > database.ini
 
 #Descomentar para solo ejecutar el programa con root
@@ -69,13 +69,13 @@ password=$CLAVE_1" > database.ini
 unset CLAVE_1
 unset CLAVE_2
 
-echo "Creamos la base de datos 'geoip'"
-if ! sudo -u postgres createdb geoip -O geoip 2>/dev/null ; then
-	echo "No se ha podido crear la base de datos geoip. Puede que ya exista."
+echo "Creamos la base de datos 'iploc'"
+if ! sudo -u postgres createdb iploc -O iploc 2>/dev/null ; then
+	echo "No se ha podido crear la base de datos iploc. Puede que ya exista."
 fi
 
-sudo -u postgres psql -U postgres -d postgres -c "GRANT ALL PRIVILEGES ON DATABASE \"geoip\" TO geoip;"
-sudo -u postgres psql -U postgres -d postgres -c "ALTER USER geoip WITH SUPERUSER "
+sudo -u postgres psql -U postgres -d postgres -c "GRANT ALL PRIVILEGES ON DATABASE \"iploc\" TO iploc;"
+sudo -u postgres psql -U postgres -d postgres -c "ALTER USER iploc WITH SUPERUSER "
 
 
 sudo /etc/init.d/postgresql reload
