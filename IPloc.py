@@ -95,7 +95,6 @@ def insertPostgres():
 	try:
 	    params = config()
 	    con = psycopg2.connect(**params)
-	    #con = psycopg2.connect("dbname=geoip user=geoip password=postgrespassword")
 	    con.set_client_encoding("utf8")
 	except:
 	    print "I am unable to connect to the database."
@@ -116,7 +115,7 @@ def insertPostgres():
 	            "     OIDS=FALSE"+
 	            ");"+
 	            "ALTER TABLE public.asn"+
-	            "     OWNER TO geoip;")
+	            "     OWNER TO locip;")
     
 	cur.execute("DROP TABLE IF EXISTS public.cityblocks;")
 	cur.execute("CREATE TABLE public.cityblocks ( "+
@@ -136,7 +135,7 @@ def insertPostgres():
 	            "  OIDS=FALSE"+
 	            ");"+
 	            "ALTER TABLE public.cityblocks"+
-	            "  OWNER TO geoip;")
+	            "  OWNER TO locip;")
     
 	cur.execute("DROP TABLE IF EXISTS public.citylocations;")
 	cur.execute("CREATE TABLE public.citylocations("+
@@ -160,7 +159,7 @@ def insertPostgres():
 	            "  OIDS=FALSE"+
 	            ");"+
 	            "ALTER TABLE public.citylocations"+
-	            "  OWNER TO geoip;")
+	            "  OWNER TO locip;")
     
 	con.commit()
     
