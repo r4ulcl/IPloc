@@ -74,8 +74,32 @@ if ! sudo -u postgres createdb iploc -O iploc 2>/dev/null ; then
 	echo "No se ha podido crear la base de datos iploc. Puede que ya exista."
 fi
 
-sudo -u postgres psql -U postgres -d postgres -c "GRANT ALL PRIVILEGES ON DATABASE \"iploc\" TO iploc;"
-sudo -u postgres psql -U postgres -d postgres -c "ALTER USER iploc WITH SUPERUSER "
+function dosql()
+{
+	sudo -u postgres psql -U postgres -d postgres -c "$1"
+}
+
+dosql "GRANT ALL PRIVILEGES ON DATABASE \"iploc\" TO iploc;"
+dosql "ALTER USER iploc WITH SUPERUSER "
+
+# Creamos la tabla de tipos de IP
+dosql "CREATE TABLE types ( id integer PRIMARY KEY, tipo varchar(10) NOT NULL, inicio cidr NOT NULL, final cidr NOT NULL );"
+
+echo "Instalando curl y gawk"
+sudo apt-get install curl -y
+sudo apt-get install gawk -y
+echo "Descargando el fichero de tipos de IP."
+curl -L "http://list.iblocklist.com/?list=xoebmbyexwuiogmbyprb&fileformat=p2p&archiveformat=gz" -o tipos.gz
+echo "Insertando las IP en la base de datos."
+gunzip "tipos.gz"
+tr ':' '-' < tipos > tipos_aux
+rm tipos
+sed 1,2d tipos_aux | awk -F '-' '{ print "insert into types (id, tipo, inicio, final) values (" NR ",'\''"$1"'\'','\''"$2"'\'','\''"$3"'\'');"} ;' > inserts.sql
+rm tipos_aux
+
+sudo -u postgres psql -U postgres -d postgres -f inserts.sql
+rm inserts.sql
+
 
 
 sudo /etc/init.d/postgresql reload
