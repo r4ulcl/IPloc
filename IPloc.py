@@ -60,7 +60,7 @@ def idioma(filename='database.ini', section='idioma'):
 	print "Error al cargar datos desde database.ini"
 	sys.exit(0)
 
-
+#Funcion que crea la base de datos e introduce los datos
 def insertPostgres():
     con = None
     try:
@@ -293,7 +293,7 @@ def geo(ip):
         if con:
             con.close()
 
-
+#Funcion que comprueba si una IP es valida
 def validIP(address):
     try:
         parts = address.split(".")
@@ -306,8 +306,9 @@ def validIP(address):
     except ValueError:
         return False
 
+#Funcion para obtener la informacion de una ip  
 def getGeo(addr):
-    if(not validIP(addr)):
+    if(not validIP(addr)): #comprobamos si es una ip valida
 	try:
 	    addr=str(socket.gethostbyname(addr)) #si no es una IP comprobamos hostname
 	except:

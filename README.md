@@ -63,6 +63,7 @@ Para obtener la información de un hostname se pueden utilizar los mismos comand
 * Instalación en windows
 * Instalación en MAC OS
 * Descarga premium MaxMind
+* Mover la creacion de las tablas al instalador
 
 ## Autores
 
