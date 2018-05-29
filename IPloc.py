@@ -25,6 +25,7 @@ import psycopg2.extensions
 import urllib
 import zipfile
 import os
+import gzip
 from configparser import ConfigParser
 
 #Funcion para obtener los datos de la conexion a la base de datos
@@ -89,6 +90,20 @@ def insertPostgres():
 	ficheroASN = zip_ref.namelist()
 	carpetaASN=ficheroASN[0].split("/")[0]
 	zip_ref.close()
+
+
+	url = 'http://list.iblocklist.com/?list=xoebmbyexwuiogmbyprb&fileformat=p2p&archiveformat=gz'    
+	print "downloading xoebmbyexwuiogmbyprb.gz"
+	urllib.urlretrieve(url, "xoebmbyexwuiogmbyprb.gz")
+	print "Unzipping xoebmbyexwuiogmbyprb.gz"
+	
+	inF = gzip.GzipFile("xoebmbyexwuiogmbyprb.gz", 'rb')
+	s = inF.read()
+	inF.close()
+
+	outF = file("xoebmbyexwuiogmbyprb.txt", 'wb')
+	outF.write(s)
+	outF.close()
     
     
 	#Nos conectamos a la BDD
@@ -160,6 +175,13 @@ def insertPostgres():
 	            ");"+
 	            "ALTER TABLE public.citylocations"+
 	            "  OWNER TO iploc;")
+	cur.execute("DROP TABLE IF EXISTS public.tipos;")
+	cur.execute("CREATE TABLE tipos ( tipo varchar(10) NOT NULL, inicio inet PRIMARY KEY, final inet NOT NULL )"+
+	            "WITH ("+
+	            "  OIDS=FALSE"+
+	            ");"+
+	            "ALTER TABLE public.tipos"+
+	            "  OWNER TO iploc;")
     
 	con.commit()
     
@@ -200,11 +222,17 @@ def insertPostgres():
 	fout.writelines(data[1:])
     #Insertamos los datos
     cur.execute("COPY public.citylocations FROM '"+ficheroPath+"' CSV ENCODING 'utf-8';")
+
+
+    with open('xoebmbyexwuiogmbyprb.txt') as f:
+	for line in f.readlines()[2:]:
+		reg = line.rstrip().replace(':','-').split('-')
+		query = "insert into tipos (tipo, inicio, final) values (\'" + reg[0] + "\',\'" + reg[1] + "\',\'" + reg[2] + "\');"
+    		cur.execute(query)
+
     con.commit()
-    
-    
-    
-    
+
+
     
 #funcion que obtiene la informacion de una ip y la devuelve en formato resumido
 def geoShort(ip):
