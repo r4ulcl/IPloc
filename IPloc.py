@@ -287,9 +287,19 @@ def geo(ip):
 	psycopg2.extensions.register_type(psycopg2.extensions.UNICODE)
 
         cur = con.cursor()
+	cur.execute("SELECT tipo FROM public.tipos WHERE inicio <= \'" + str(ip) + "\' AND final >= \'" + str(ip) + "\';")
+	colnames = [desc[0] for desc in cur.description]
+	rows = cur.fetchall()
+	tipo = None 
+	if cur.rowcount == 1:
+	    tipo = rows[0]
+
+
+	cur = con.cursor()
 
         cur.execute("SELECT  * FROM public.cityblocks NATURAL JOIN cityLocations WHERE '"+str(ip)+"' <<  network;")
         colnames = [desc[0] for desc in cur.description]
+	
 
         rows = cur.fetchall()
         if cur.rowcount == 1: #si hay solo un resultado
@@ -305,9 +315,13 @@ def geo(ip):
 	    if cur.rowcount == 1: #si hay solo un resultado
 		colnames = colnames + colnames2 + l
 		country = country + rows2[0]+l2
+	
+	    json = dict(zip(colnames,country)) #unimos columnas y valores y lo pasamos a json
 
+	    if tipo:
+		json['type'] = tipo[0]
 
-            return dict(zip(colnames,country)) #unimos columnas y valores y lo pasamos a json
+            return json
 
         cur.close()
 
