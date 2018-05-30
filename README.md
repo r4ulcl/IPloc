@@ -15,6 +15,8 @@ Se ha utilizado PostgreSQL ya que dispone de un tipo de datos para IPs y redes (
 
 * Elegir idioma de la BDD en la instalación
 
+* Incluye la base de datos proxy de iblocklist.com, con proxies y nodos TOR
+
 ## Instalación
 ### Requisitos
 * Linux
@@ -83,5 +85,4 @@ LinkedIn: (https://www.linkedin.com/in/miguelromeral/)
 
 GNU General Public License v3.0
 
-This product includes GeoLite2 data created by MaxMind, available from
-<a href="http://www.maxmind.com">http://www.maxmind.com</a>
+This product includes GeoLite2 data created by MaxMind, available from <a href="http://www.maxmind.com">http://www.maxmind.com</a> and proxy list by Bluetack, available from <a href="https://www.iblocklist.com">https://www.iblocklist.com</a>

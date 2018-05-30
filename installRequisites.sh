@@ -137,9 +137,6 @@ echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 		chmod 600 database.ini
-		python insertPostgres.py
-		echo
-		echo "Ahora ya puede ejecutar: sudo python IPloc.py <IP>"
 fi
 
 python IPloc.py -u
@@ -147,6 +144,7 @@ python IPloc.py -u
 #borramos los ficheros descargador
 rm GeoLite2-ASN-CSV.zip
 rm GeoLite2-City-CSV.zip
+rm xoebmbyexwuiogmbyprb*
 rm -r /tmp/GeoLite2-*
 
 echo 
